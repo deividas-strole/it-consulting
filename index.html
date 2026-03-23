@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deividas Strole — Technology Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0f0f18;
+    --surface: #13131e;
+    --surface2: #1a1a28;
+    --border: #ffffff0d;
+    --border2: #ffffff18;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --text: #e8e8f0;
+    --text2: #9090a8;
+    --text3: #5a5a72;
+    --glow: #00e5ff22;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* ── GRID LINES ── */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 10px 22px;
+    cursor: pointer;
+    text-decoration: none;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #33eeff; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    width: 700px; height: 700px;
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle at 40% 40%, #7c3aed44, #00e5ff11 50%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-52%) scale(1.06); }
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 6px 14px 6px 10px;
+    margin-bottom: 28px;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 7vw, 88px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .hero-name .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text3);
+  }
+
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.5vw, 28px);
+    color: var(--accent);
+    margin-bottom: 28px;
+    letter-spacing: 0.01em;
+  }
+
+  .hero-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.85;
+    max-width: 520px;
+    margin-bottom: 44px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    background: transparent;
+    border: 1px solid var(--border2);
+    padding: 13px 28px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    padding-top: 44px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* ── PHOTO CARD ── */
+  .hero-photo-card {
+    position: relative;
+  }
+  .hero-photo-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--accent), transparent 50%, var(--accent2));
+    z-index: -1;
+    clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
+  }
+  .photo-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--text3);
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent2)11, var(--accent)08);
+  }
+  .photo-placeholder svg {
+    width: 80px; height: 80px;
+    opacity: 0.3;
+  }
+  .photo-placeholder p {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .photo-corner {
+    position: absolute;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    padding: 4px 10px;
+  }
+  .photo-corner.tl { top: 12px; left: 20px; }
+  .photo-corner.br { bottom: 12px; right: 20px; }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+  }
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin-left: 8px;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .service-card {
+    background: var(--bg);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .service-card:hover { background: var(--surface); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 20px;
+    color: var(--accent);
+  }
+  .service-num {
+    position: absolute;
+    top: 28px; right: 28px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 48px;
+    color: var(--border2);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .service-card:hover .service-num { color: #ffffff08; }
+
+  .service-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 12px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .service-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* ── EXPERTISE STRIP ── */
+  .expertise-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+
+  .expertise-item {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    transition: background 0.2s;
+  }
+  .expertise-item:nth-child(2n) { border-right: none; }
+  .expertise-item:nth-last-child(-n+2) { border-bottom: none; }
+  .expertise-item:hover { background: var(--surface2); }
+
+  .exp-check {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .exp-check svg { width: 12px; height: 12px; color: var(--bg); }
+
+  .exp-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .exp-text strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .about-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(24px, 3vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .about-headline em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .about-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .tech-pill {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    border: 1px solid var(--border2);
+    padding: 5px 12px;
+    transition: all 0.2s;
+  }
+  .tech-pill:hover { color: var(--accent); border-color: var(--accent); }
+
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 6px;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  .timeline-year {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .timeline-role {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .timeline-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 20px;
+  }
+  .contact-headline .accent { color: var(--accent); }
+
+  .contact-sub {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+    margin-bottom: 44px;
+  }
+
+  .contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text2);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-item:hover { color: var(--accent); }
+  .contact-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    transition: border-color 0.2s;
+  }
+  .contact-item:hover .contact-icon { border-color: var(--accent); }
+  .contact-icon svg { width: 14px; height: 14px; }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-select option { background: var(--bg2); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-submit {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: #33eeff; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-left {
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+  .footer-left strong { color: var(--text2); }
+  .footer-right {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+  .footer-right span { color: var(--accent); }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 14px 0;
+    background: var(--surface);
+    position: relative;
+    z-index: 1;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-item {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text3);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+  .marquee-item::after {
+    content: '◆';
+    color: var(--accent);
+    font-size: 6px;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.4;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    padding: 16px 24px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    z-index: 5000;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .toast.show { transform: translateX(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .hero-photo-card { max-width: 280px; }
+    .section { padding: 64px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .expertise-grid { grid-template-columns: 1fr; }
+    .expertise-item:nth-child(2n) { border-right: 1px solid var(--border); }
+    .expertise-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+    .expertise-item:last-child { border-bottom: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="toast" id="toast">✓ Message sent successfully</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">D<span>.</span>Strole</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get In Touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">Available for Projects</div>
+      <h1 class="hero-name">
+        DEIVIDAS<br>
+        <span class="line2">STROLE</span>
+      </h1>
+      <p class="hero-title">Technology Specialist & IT Consultant</p>
+      <p class="hero-desc">
+        End-to-end technology solutions for private clients since 2000. From hardware diagnostics
+        to network architecture, software customization to smart home integration — one specialist,
+        total coverage.
+      </p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">View Services</a>
+        <a href="#contact" class="btn-ghost">Start a Project</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">25<span>+</span></div>
+          <div class="stat-label">Years Active</div>
+        </div>
+        <div>
+          <div class="stat-num">10<span>+</span></div>
+          <div class="stat-label">Service Areas</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Devices Supported</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTO PLACEHOLDER -->
+    <div class="hero-photo-card reveal">
+      <div class="photo-placeholder">
+        <span class="photo-corner tl">DS_PHOTO.JPG</span>
+        <svg viewBox="0 0 80 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="28" r="18"/>
+          <path d="M10 72c0-16.6 13.4-30 30-30s30 13.4 30 30H10z"/>
+        </svg>
+        <p>Photo coming<br>soon</p>
+        <span class="photo-corner br">EST. 2000</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Hardware Repair</span>
+    <span class="marquee-item">Network Setup</span>
+    <span class="marquee-item">Software Development</span>
+    <span class="marquee-item">Cybersecurity</span>
+    <span class="marquee-item">Smart Home</span>
+    <span class="marquee-item">Data Backup</span>
+    <span class="marquee-item">System Upgrades</span>
+    <span class="marquee-item">User Training</span>
+    <span class="marquee-item">IT Consulting</span>
+    <span class="marquee-item">Technical Support</span>
+    <!-- duplicate for seamless -->
+    <span class="marquee-item">Hardware Repair</span>
+    <span class="marquee-item">Network Setup</span>
+    <span class="marquee-item">Software Development</span>
+    <span class="marquee-item">Cybersecurity</span>
+    <span class="marquee-item">Smart Home</span>
+    <span class="marquee-item">Data Backup</span>
+    <span class="marquee-item">System Upgrades</span>
+    <span class="marquee-item">User Training</span>
+    <span class="marquee-item">IT Consulting</span>
+    <span class="marquee-item">Technical Support</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-num">01 —</span>
+      <h2 class="section-title">Core Services</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="1"/><path d="M8 21h8M12 17v4"/>
+        </svg>
+        <div class="service-title">System Installation & Upgrades</div>
+        <div class="service-desc">Install, configure, and upgrade desktops, laptops, and peripherals. Full hardware lifecycle management from procurement to deployment.</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        <div class="service-title">Hardware & Software Repair</div>
+        <div class="service-desc">Diagnose and resolve hardware failures, OS issues, and software conflicts. Restoring optimal system performance with precision troubleshooting.</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+        </svg>
+        <div class="service-title">Software Customization</div>
+        <div class="service-desc">Program, customize, and maintain software applications tailored to individual client workflows and operational requirements.</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="9" height="9" rx="1"/><rect x="14" y="1" width="9" height="9" rx="1"/>
+          <rect x="14" y="14" width="9" height="9" rx="1"/><rect x="1" y="14" width="9" height="9" rx="1"/>
+        </svg>
+        <div class="service-title">IT System Design & Networks</div>
+        <div class="service-desc">Design and plan comprehensive IT infrastructures including network topology, device integration, and workflow optimization strategies.</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">05</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div class="service-title">Security & Data Protection</div>
+        <div class="service-desc">Implement antivirus protection, data backup solutions, and access control frameworks. Keeping your digital assets secure and recoverable.</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">06</div>
+        <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <div class="service-title">Smart Home & Consumer Tech</div>
+        <div class="service-desc">Setup and integration of TVs, smartphones, tablets, and smart home ecosystems. Seamless connectivity across all your devices.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section class="expertise-section" id="expertise">
+  <div class="section-inner" style="max-width:1200px; margin:0 auto; padding:80px 48px;">
+    <div class="section-header reveal">
+      <span class="section-num">02 —</span>
+      <h2 class="section-title">Full Capabilities</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="expertise-grid">
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>System Installation & Configuration</strong>Desktops, laptops, servers, and peripherals — from unboxing to production-ready setup.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Hardware Diagnostics & Repair</strong>Root-cause analysis and precision repairs restoring peak system performance.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Custom Software Programming</strong>Bespoke application development and modification aligned to client-specific workflows.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Network Planning & IT Design</strong>End-to-end infrastructure design covering topology, device integration, and optimization.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Technology Advisory</strong>Impartial guidance on purchases, upgrades, and cost-effective technology investments.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Equipment Sourcing & Sales</strong>Procurement of computers, components, and technology products at competitive pricing.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Cybersecurity Implementation</strong>Layered protection: antivirus, backup systems, encryption, and access control policies.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Technical Support & Training</strong>Ongoing support and user education ensuring clients maximize their technology investments.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Smart Home & Consumer Devices</strong>TVs, smartphones, tablets, streaming devices — setup, sync, and integration across platforms.</div>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="exp-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="exp-text"><strong>Troubleshooting Across Platforms</strong>Windows, macOS, iOS, Android — comprehensive cross-platform support and problem resolution.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <span class="section-num">03 —</span>
+      <h2 class="section-title">About</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p class="about-label">Background</p>
+        <h3 class="about-headline">Two decades of <em>solving</em> what others can't.</h3>
+        <p class="about-text">
+          Since 2000, I've delivered comprehensive technology services to private clients across
+          a full spectrum of IT disciplines. Where others specialize narrowly, I provide a single
+          point of contact for every technology challenge you face.
+        </p>
+        <p class="about-text">
+          My approach is straightforward: understand the client's real needs, design the right
+          solution — not the most expensive one — and execute it with precision. From emergency
+          hardware recovery to long-term infrastructure planning.
+        </p>
+        <p class="about-text">
+          Every engagement is handled with the attention to detail and accountability that only
+          an independent specialist can offer.
+        </p>
+        <div class="tech-pills">
+          <span class="tech-pill">Windows</span>
+          <span class="tech-pill">macOS</span>
+          <span class="tech-pill">Linux</span>
+          <span class="tech-pill">Android</span>
+          <span class="tech-pill">iOS</span>
+          <span class="tech-pill">Networking</span>
+          <span class="tech-pill">AppFolio</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">HTML/CSS</span>
+          <span class="tech-pill">Smart Home</span>
+          <span class="tech-pill">Security</span>
+          <span class="tech-pill">Data Recovery</span>
+        </div>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <div class="timeline-year">2000 — Present</div>
+          <div class="timeline-role">Independent Technology Specialist</div>
+          <div class="timeline-desc">Providing end-to-end IT consulting and technical services to private clients. Full-spectrum coverage from break-fix support to strategic technology planning.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2001 — 2024</div>
+          <div class="timeline-role">Office Associate — Roque & Mark Co., Inc.</div>
+          <div class="timeline-desc">Work order management via AppFolio, property inspections, and operational support across a portfolio of managed properties in the Los Angeles area.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">Ongoing</div>
+          <div class="timeline-role">Web Development</div>
+          <div class="timeline-desc">Building custom web applications and tools in JavaScript, HTML, and CSS. Including AI-integrated applications using the Anthropic API.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section section" id="contact">
+  <div class="contact-inner">
+    <div>
+      <p class="about-label">Get In Touch</p>
+      <h2 class="contact-headline">Let's solve your <span class="accent">tech</span> problems.</h2>
+      <p class="contact-sub">
+        Have a hardware issue, network to set up, or need ongoing IT support? Reach out and let's
+        discuss how I can help — with 25+ years of hands-on experience behind every solution.
+      </p>
+      <div class="contact-items">
+        <a href="tel:+1-000-000-0000" class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.26a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <span>+1 (000) 000-0000 — Add your number</span>
+        </a>
+        <a href="mailto:deividas@example.com" class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span>your@email.com — Update this</span>
+        </a>
+        <a href="#" class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <span>Victorville, CA / Remote Nationwide</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Smith" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Service Needed</label>
+          <select class="form-select form-input">
+            <option value="">Select a service...</option>
+            <option>Hardware Repair / Diagnostics</option>
+            <option>Software Installation & Configuration</option>
+            <option>Network Setup & IT Design</option>
+            <option>Cybersecurity & Data Backup</option>
+            <option>Smart Home / Consumer Devices</option>
+            <option>Software Customization / Development</option>
+            <option>Technology Advisory</option>
+            <option>Ongoing Technical Support</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Describe Your Needs</label>
+          <textarea class="form-textarea" placeholder="Tell me about your technology issue or project..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>Deividas Strole</strong> — Technology Specialist & IT Consultant<br>
+    © 2000–2026. All rights reserved. Est. in the days of Windows 2000.
+  </div>
+  <div class="footer-right">Independent · Private Clients · Since <span>2000</span></div>
+</footer>
+
+<script>
+  // ── CUSTOM CURSOR ──
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  const animCursor = () => {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  };
+  animCursor();
+  document.querySelectorAll('a, button, .service-card, .expertise-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%, -50%) scale(2)'; ring.style.opacity = '0.2'; });
+    el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%, -50%) scale(1)'; ring.style.opacity = '0.4'; });
+  });
+
+  // ── SCROLL REVEAL ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // ── SERVICE CARDS STAGGER ──
+  const cardObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      document.querySelectorAll('.service-card').forEach((c, i) => {
+        setTimeout(() => { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; }, i * 100);
+      });
+      cardObs.disconnect();
+    }
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.service-card').forEach(c => {
+    c.style.opacity = '0'; c.style.transform = 'translateY(20px)';
+    c.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background 0.3s';
+  });
+  const grid = document.querySelector('.services-grid');
+  if (grid) cardObs.observe(grid);
+
+  // ── FORM SUBMIT ──
+  const toast = document.getElementById('toast');
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+    e.target.reset();
+  });
+
+  // ── NAV ACTIVE ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+    navLinks.forEach(l => {
+      l.style.color = l.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
