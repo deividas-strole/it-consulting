@@ -1,1 +1,1 @@
-IT Consulting and Sales Site. Deividas Strole
+IT Consulting and Sales Site created by Deividas Strole.
