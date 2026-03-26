@@ -1,1 +1,1 @@
-IT Consulting and Sales Site created by Deividas Strole.
+IT Consulting and Sales Site created by Deividas Strole with JavaScript, HTML, and CSS.
