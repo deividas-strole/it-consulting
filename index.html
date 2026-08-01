@@ -1133,42 +1133,142 @@
     </div>
 
     <div class="reveal">
-      <form id="contactForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="John" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Smith" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="john@example.com" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Service Needed</label>
-          <select class="form-select form-input">
-            <option value="">Select a service...</option>
-            <option>Hardware Repair / Diagnostics</option>
-            <option>Software Installation & Configuration</option>
-            <option>Network Setup & IT Design</option>
-            <option>Hardware and Software Sales</option>
-            <option>Smart Home / Consumer Devices</option>
-            <option>Software Customization / Development</option>
-            <option>Technology Advisory</option>
-            <option>Ongoing Technical Support</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Describe Your Needs</label>
-          <textarea class="form-textarea" placeholder="Tell me about your technology issue or project..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">Send Message →</button>
-      </form>
+      <form
+  id="contactForm"
+  action="https://api.web3forms.com/submit"
+  method="POST"
+>
+  <!-- Replace this with your Web3Forms access key -->
+  <input
+    type="hidden"
+    name="access_key"
+    value="b33b0ab6-4525-4fdb-a808-45d3b8eb6a6f"
+  >
+
+  <input
+    type="hidden"
+    name="subject"
+    value="New IT consulting inquiry from stroleconsulting.com"
+  >
+
+  <input
+    type="hidden"
+    name="from_name"
+    value="Strole Consulting Website"
+  >
+
+  <!-- Spam trap: keep this hidden -->
+  <input
+    type="checkbox"
+    name="botcheck"
+    class="hidden"
+    style="display:none"
+  >
+
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label" for="firstName">First Name</label>
+      <input
+        id="firstName"
+        name="first_name"
+        type="text"
+        class="form-input"
+        placeholder="John"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="lastName">Last Name</label>
+      <input
+        id="lastName"
+        name="last_name"
+        type="text"
+        class="form-input"
+        placeholder="Smith"
+        required
+      >
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="email">Email Address</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      class="form-input"
+      placeholder="john@example.com"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="phone">Phone Number</label>
+    <input
+      id="phone"
+      name="phone"
+      type="tel"
+      class="form-input"
+      placeholder="(555) 555-5555"
+    >
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="service">Service Needed</label>
+    <select
+      id="service"
+      name="service"
+      class="form-select form-input"
+      required
+    >
+      <option value="">Select a service...</option>
+      <option value="Hardware Repair / Diagnostics">
+        Hardware Repair / Diagnostics
+      </option>
+      <option value="Software Installation & Configuration">
+        Software Installation & Configuration
+      </option>
+      <option value="Network Setup & IT Design">
+        Network Setup & IT Design
+      </option>
+      <option value="Hardware and Software Sales">
+        Hardware and Software Sales
+      </option>
+      <option value="Smart Home / Consumer Devices">
+        Smart Home / Consumer Devices
+      </option>
+      <option value="Software Customization / Development">
+        Software Customization / Development
+      </option>
+      <option value="Technology Advisory">
+        Technology Advisory
+      </option>
+      <option value="Ongoing Technical Support">
+        Ongoing Technical Support
+      </option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="message">
+      Describe Your Needs
+    </label>
+
+    <textarea
+      id="message"
+      name="message"
+      class="form-textarea"
+      placeholder="Tell me about your technology issue or project..."
+      required
+    ></textarea>
+  </div>
+
+  <button type="submit" class="form-submit">
+    Send Message →
+  </button>
+</form>
     </div>
   </div>
 </section>
@@ -1228,13 +1328,53 @@
   if (grid) cardObs.observe(grid);
 
   // ── FORM SUBMIT ──
-  const toast = document.getElementById('toast');
-  document.getElementById('contactForm').addEventListener('submit', e => {
-    e.preventDefault();
+const form = document.getElementById('contactForm');
+const toast = document.getElementById('toast');
+const submitButton = form.querySelector('.form-submit');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const originalButtonText = submitButton.textContent;
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Sending...';
+
+  try {
+    const formData = new FormData(form);
+
+    const response = await fetch(
+      'https://api.web3forms.com/submit',
+      {
+        method: 'POST',
+        body: formData
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Submission failed');
+    }
+
+    toast.textContent = '✓ Message sent successfully';
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
-    e.target.reset();
-  });
+    form.reset();
+  } catch (error) {
+    console.error('Contact form error:', error);
+
+    toast.textContent =
+      'Message could not be sent. Please try again.';
+    toast.classList.add('show');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  }
+});
 
   // ── NAV ACTIVE ──
   const sections = document.querySelectorAll('section[id]');
