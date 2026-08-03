@@ -117,4 +117,16 @@ Strole Consulting has provided technology services to private clients since 2000
 
 All website content, branding, graphics, and source code are the property of Deividas Strole unless otherwise stated.
 
-© 2000–2026 Strole Consulting. All rights reserved.
+## Connect
+
+* [Deividas Strole](https://deividasstrole.com)
+* [LinkedIn](https://linkedin.com/in/deividas-strole)
+* [YouTube](https://youtube.com/@deividas-strole)
+* [Dev.to](https://dev.to/deividas-strole)
+* [Medium](https://medium.com/@deividas-strole)
+* [X](https://x.com/deividasstrole)
+* [Lake Apps](https://lakeapps.com)
+  
+If you enjoyed this project, consider starring the repository to support the work of **Deividas Strole**.
+
+© Strole Consulting. All rights reserved.
