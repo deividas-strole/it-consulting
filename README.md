@@ -8,7 +8,7 @@ The website presents services including IT consulting, computer repair, hardware
 
 https://stroleconsulting.com
 
-## Features
+## Features:
 
 * Responsive single-page design
 * Modern dark technology-themed interface
