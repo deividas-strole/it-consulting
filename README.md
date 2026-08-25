@@ -29,7 +29,7 @@ https://stroleconsulting.com
 * GitHub Pages
 * Google Fonts
 
-## Project Structure
+## Project Structure:
 
 ```text
 stroleconsulting/
