@@ -20,7 +20,7 @@ https://stroleconsulting.com
 * Search engine and social media metadata
 * Custom favicon and branding
 
-## Technologies Used
+## Technologies Used:
 
 * HTML5
 * CSS3
